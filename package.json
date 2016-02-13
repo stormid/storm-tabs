@@ -29,6 +29,8 @@
     "UI"
   ],
   "dependencies": {
-    "merge": "^1.2.0"
+    "dom-classlist": "^1.0.1",
+    "merge": "^1.2.0",
+    "storm-attributelist": "^0.1.0"
   }
 }

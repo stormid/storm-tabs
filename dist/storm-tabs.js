@@ -1,4 +1,9 @@
-(function(root, factory) {
+/**
+ * @name storm-tabs: For multi-panelled content areas
+ * @version 0.1.0: Sat, 13 Feb 2016 17:36:47 GMT
+ * @author stormid
+ * @license MIT
+ */(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);
   } else if (typeof exports === 'object') {
