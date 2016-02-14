@@ -11,7 +11,7 @@
     
     var instances = [],
         defaults = {
-            titleClass: 'js-tabs__link',
+            titleClass: '.js-tabs__link',
             currentClass: 'active',
             active: 0
         },
@@ -31,21 +31,19 @@
 			return (node.children && loop(node.children)) || null;
 		};
     
-    
     function StormTabs(el, opts) {
         this.settings = merge({}, defaults, opts);
-        
-		this.links = find(el, function(a) {
-			return classlist(a).contains(this.settings.titleClass);
-		}.bind(this));
+		
+		this.links = [].slice.call(el.querySelectorAll(this.settings.titleClass));
 		
 		this.targets = this.links.map(function(el){
             return document.getElementById(el.getAttribute('href').substr(1)) || console.error('Tab target not found');
          });
 		
         this.current = this.settings.active;
-        this.initAria();
-        this.initTitles();
+        this.initAria()
+			.initTitles()
+			.open(this.current);
     }
     
     StormTabs.prototype.initAria = function() {
@@ -82,34 +80,47 @@
         
         return this;
     };
-    
-    /* REFACTOR ME PLS, DRY*/
-    StormTabs.prototype.open = function(i) {
-        classlist(this.links[i]).add(this.settings.currentClass);
-        classlist(this.targets[i]).add(this.settings.currentClass);
+	
+	StormTabs.prototype.change = function(type, i) {
+		var methods = {
+			open: {
+				classlist: 'add',
+				tabIndex: {
+					target: this.targets[i],
+					value: '0'
+				}
+			},
+			close: {
+				classlist: 'remove',
+				tabIndex: {
+					target: this.targets[this.current],
+					value: '-1'
+				}
+			}
+		};
+		
+		classlist(this.links[i])[methods[type].classlist](this.settings.currentClass);
+		classlist(this.targets[i])[methods[type].classlist](this.settings.currentClass);
         attributelist.toggle(this.targets[i], 'aria-hidden');
-        attributelist.toggle(this.links[i], 'aria-selected');
-        attributelist.toggle(this.links[i], 'aria-expanded');
-        attributelist.set(this.targets[i], {
-            'tabIndex': '0'
+        attributelist.toggle(this.links[i], ['aria-selected', 'aria-expanded']);
+		attributelist.set(methods[type].tabIndex.target, {
+            'tabIndex': methods[type].tabIndex.value
         });
+	};
+    
+    StormTabs.prototype.open = function(i) {
+		this.change('open', i);
         this.current = i;
         return this;
     };
     
     StormTabs.prototype.close = function(i) {
-        classlist(this.links[this.current]).remove(this.settings.currentClass);
-        classlist(this.targets[this.current]).remove(this.settings.currentClass);
-        attributelist.toggle(this.targets[i], 'aria-hidden');
-        attributelist.toggle(this.links[i], 'aria-selected');
-        attributelist.toggle(this.links[i], 'aria-expanded');
-        attributelist.set(this.targets[this.current], {
-            'tabIndex': '-1'
-        });
+		this.change('close', i);
         return this;
     };
     
     StormTabs.prototype.toggle = function(i) {
+		if(this.current === i) { return; }
         if(this.current === null) { 
             this.open(i);
             return this;
