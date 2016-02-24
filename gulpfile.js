@@ -38,12 +38,24 @@ var onError = function(err) {
 /************************
  *  Task definitions 
  ************************/
-gulp.task('js', function() {
+gulp.task('js:copy', function() {
     return gulp.src('src/*.js')
         .pipe(header(banner, {pkg : pkg}))
 		.pipe(gulp.dest('dist/'));
 });
 
+gulp.task('js:async', function() {
+    return gulp.src('src/*.js')
+        .pipe(header(banner, {pkg : pkg}))
+		.pipe(browserify({
+          insertGlobals : true,
+          debug : true
+        }))
+		.pipe(uglify())
+  		.pipe(rename({suffix: '.async.min'}))
+		.pipe(gulp.dest('dist'));
+});
+gulp.task('js', ['js:copy', 'js:async']);
 gulp.task('compress', ['js'], function() {
     return gulp.src('src/*.js')
 		.pipe(header(banner, {pkg : pkg}))
