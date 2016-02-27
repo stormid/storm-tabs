@@ -1,6 +1,6 @@
 /**
  * @name storm-tabs: For multi-panelled content areas
- * @version 0.2.0: Sat, 27 Feb 2016 21:57:50 GMT
+ * @version 0.3.0: Sat, 27 Feb 2016 22:15:22 GMT
  * @author stormid
  * @license MIT
  */module.exports = (function() {
