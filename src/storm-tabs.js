@@ -1,12 +1,4 @@
-(function(root, factory) {
-  if (typeof define === 'function' && define.amd) {
-    define([], factory);
-  } else if (typeof exports === 'object') {
-    module.exports = factory();
-  } else {
-    root.StormTabs = factory();
-  }
-}(this, function() {
+module.exports = (function() {
 	'use strict';
     
     var KEY_CODES = {
@@ -22,7 +14,7 @@
             currentClass: 'active',
             active: 0
         },
-        StormComponentPrototype = {
+        StormTabs = {
             init: function() {
                 this.links = [].slice.call(this.DOMElement.querySelectorAll(this.settings.titleClass));
                 this.targets = this.links.map(function(el){
@@ -128,7 +120,7 @@
         }
         
         els.forEach(function(el, i){
-            instances[i] = assign(Object.create(StormComponentPrototype), {
+            instances[i] = assign(Object.create(StormTabs), {
                 DOMElement: el,
                 settings: merge({}, defaults, opts)
             }, {
@@ -156,4 +148,4 @@
         destroy: destroy
 	};
 	
- }));
+ }());

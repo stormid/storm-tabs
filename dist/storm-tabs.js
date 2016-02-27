@@ -1,17 +1,9 @@
 /**
  * @name storm-tabs: For multi-panelled content areas
- * @version 0.1.0: Wed, 24 Feb 2016 19:37:26 GMT
+ * @version 0.2.0: Sat, 27 Feb 2016 21:57:50 GMT
  * @author stormid
  * @license MIT
- */(function(root, factory) {
-  if (typeof define === 'function' && define.amd) {
-    define([], factory);
-  } else if (typeof exports === 'object') {
-    module.exports = factory();
-  } else {
-    root.StormTabs = factory();
-  }
-}(this, function() {
+ */module.exports = (function() {
 	'use strict';
     
     var KEY_CODES = {
@@ -27,7 +19,7 @@
             currentClass: 'active',
             active: 0
         },
-        StormComponentPrototype = {
+        StormTabs = {
             init: function() {
                 this.links = [].slice.call(this.DOMElement.querySelectorAll(this.settings.titleClass));
                 this.targets = this.links.map(function(el){
@@ -133,7 +125,7 @@
         }
         
         els.forEach(function(el, i){
-            instances[i] = assign(Object.create(StormComponentPrototype), {
+            instances[i] = assign(Object.create(StormTabs), {
                 DOMElement: el,
                 settings: merge({}, defaults, opts)
             }, {
@@ -161,4 +153,4 @@
         destroy: destroy
 	};
 	
- }));
+ }());
