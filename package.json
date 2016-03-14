@@ -21,7 +21,12 @@
     "gulp-notify": "^2.2.0",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.4.2",
-    "run-sequence": "^1.1.0"
+    "run-sequence": "^1.1.0",
+    "dom-classlist": "^1.0.1",
+    "merge": "^1.2.0",
+    "object-assign": "^4.0.1",
+    "storm-attributelist": "^0.2.0",
+    "lodash.throttle": "^4.0.0"
   },
   "keywords": [
     "stormid",
@@ -29,9 +34,5 @@
     "UI"
   ],
   "dependencies": {
-    "dom-classlist": "^1.0.1",
-    "merge": "^1.2.0",
-    "object-assign": "^4.0.1",
-    "storm-attributelist": "^0.2.0"
   }
 }

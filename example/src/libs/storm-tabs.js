@@ -1,17 +1,9 @@
 /**
  * @name storm-tabs: For multi-panelled content areas
- * @version 0.1.0: Fri, 19 Feb 2016 16:00:13 GMT
+ * @version 0.4.1: Mon, 14 Mar 2016 21:01:46 GMT
  * @author stormid
  * @license MIT
- */(function(root, factory) {
-  if (typeof define === 'function' && define.amd) {
-    define([], factory);
-  } else if (typeof exports === 'object') {
-    module.exports = factory();
-  } else {
-    root.StormTabs = factory();
-  }
-}(this, function() {
+ */module.exports = (function() {
 	'use strict';
     
     var KEY_CODES = {
@@ -20,14 +12,12 @@
         },
         instances = [],
         triggerEvents = ['click', 'keydown'],
-        assign = require('object-assign'),
-        merge = require('merge'),
         defaults = {
             titleClass: '.js-tabs__link',
             currentClass: 'active',
             active: 0
         },
-        StormComponentPrototype = {
+        StormTabs = {
             init: function() {
                 this.links = [].slice.call(this.DOMElement.querySelectorAll(this.settings.titleClass));
                 this.targets = this.links.map(function(el){
@@ -41,7 +31,7 @@
             },
             initAria: function() {
                 this.links.forEach(function(el, i){
-                    this.attributelist.set(el, {
+                    STORM.UTILS.attributelist.set(el, {
                         'role' : 'tab',
                         'aria-expanded' : false,
                         'aria-selected' : false,
@@ -50,7 +40,7 @@
                 }.bind(this));
 
                 this.targets.forEach(function(el){
-                    this.attributelist.set(el, {
+                    STORM.UTILS.attributelist.set(el, {
                         'role' : 'tabpanel',
                         'aria-hidden' : true,
                         'tabIndex': '-1'
@@ -96,11 +86,11 @@
                     }
                 };
 
-                this.classlist(this.links[i])[methods[type].classlist](this.settings.currentClass);
-                this.classlist(this.targets[i])[methods[type].classlist](this.settings.currentClass);
-                this.attributelist.toggle(this.targets[i], 'aria-hidden');
-                this.attributelist.toggle(this.links[i], ['aria-selected', 'aria-expanded']);
-                this.attributelist.set(methods[type].tabIndex.target, {
+                STORM.UTILS.classlist(this.links[i])[methods[type].classlist](this.settings.currentClass);
+                STORM.UTILS.classlist(this.targets[i])[methods[type].classlist](this.settings.currentClass);
+                STORM.UTILS.attributelist.toggle(this.targets[i], 'aria-hidden');
+                STORM.UTILS.attributelist.toggle(this.links[i], ['aria-selected', 'aria-expanded']);
+                STORM.UTILS.attributelist.set(methods[type].tabIndex.target, {
                     'tabIndex': methods[type].tabIndex.value
                 });
             },
@@ -133,12 +123,9 @@
         }
         
         els.forEach(function(el, i){
-            instances[i] = assign(Object.create(StormComponentPrototype), {
+            instances[i] = STORM.UTILS.assign(Object.create(StormTabs), {
                 DOMElement: el,
-                settings: merge({}, defaults, opts)
-            }, {
-                classlist: require('dom-classlist'),
-                attributelist: require('storm-attributelist')
+                settings: STORM.UTILS.merge({}, defaults, opts)
             });
             
             instances[i].init();
@@ -161,4 +148,4 @@
         destroy: destroy
 	};
 	
- }));
+ }());
