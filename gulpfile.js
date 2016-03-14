@@ -49,18 +49,6 @@ gulp.task('js:copy', function() {
 		.pipe(gulp.dest('dist/'));
 });
 
-gulp.task('js:async', function() {
-    return gulp.src('src/*.js')
-        .pipe(header(banner, {pkg : pkg}))
-		.pipe(browserify({
-          insertGlobals : true,
-          debug : false,
-		  standalone: componentName()
-        }))
-		.pipe(uglify())
-  		.pipe(rename({suffix: '.async.min'}))
-		.pipe(gulp.dest('dist'));
-});
 gulp.task('js:compress', function() {
     return gulp.src('src/*.js')
 		.pipe(header(banner, {pkg : pkg}))
@@ -69,7 +57,7 @@ gulp.task('js:compress', function() {
 		.pipe(gulp.dest('dist/'));
 });
 
-gulp.task('js', ['js:copy', 'js:compress', 'js:async']);
+gulp.task('js', ['js:copy', 'js:compress']);
 
 gulp.task('copy', function() {
     return gulp.src('dist/*.js')
