@@ -14,11 +14,20 @@
             TAB: 9
         },
         instances = [],
-        triggerEvents = ['click', 'keydown'],
+        triggerEvents = ['click', 'keydown', 'touchstart'],
         defaults = {
             titleClass: '.js-tabs__link',
             currentClass: 'active',
-            active: 0
+            active: 0,
+			styles: [
+				{
+					position: 'absolute',
+            		clip: 'rect(0, 0, 0, 0)'
+				},
+				{
+					position: 'relative',
+					clip:'auto'
+				}]
         },
         StormTabs = {
             init: function() {
@@ -30,6 +39,7 @@
                 this.current = this.settings.active;
                 this.initAria()
                     .initTitles()
+					.setStyles()
                     .open(this.current);
             },
             initAria: function() {
@@ -71,6 +81,15 @@
 
                 return this;
             },
+			setStyles: function() {
+				this.targets.forEach(function(target, i){
+					for(var s in this.settings.styles[Number(i === this.current)]) {
+						target.style[s] = this.settings.styles[Number(i === this.current)][s];
+					}
+				}.bind(this));
+				
+				return this;
+			},
             change: function(type, i) {
                 var methods = {
                     open: {
@@ -100,10 +119,12 @@
             open: function(i) {
                 this.change('open', i);
                 this.current = i;
+				this.setStyles();
                 return this;
             },
             close: function(i) {
                 this.change('close', i);
+				this.setStyles();
                 return this;
             },
             toggle: function(i) {
