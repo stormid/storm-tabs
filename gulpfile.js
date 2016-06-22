@@ -35,22 +35,42 @@ var onError = function(err) {
     this.emit('end');
 };
 
+var componentName = function(){
+	return pkg.name.split('-').map(function(w){ return w.substr(0, 1).toUpperCase() + w.substr(1); }).join();
+};
+
 /************************
  *  Task definitions 
  ************************/
-gulp.task('js', function() {
+
+gulp.task('js:copy', function() {
     return gulp.src('src/*.js')
         .pipe(header(banner, {pkg : pkg}))
 		.pipe(gulp.dest('dist/'));
 });
 
-gulp.task('compress', ['js'], function() {
+gulp.task('js:async', function() {
+    return gulp.src('src/*.js')
+        .pipe(header(banner, {pkg : pkg}))
+		.pipe(browserify({
+          insertGlobals : true,
+          debug : false,
+		  standalone: componentName()
+        }))
+		.pipe(uglify())
+  		.pipe(rename({suffix: '.async.min'}))
+		.pipe(gulp.dest('dist'));
+});
+
+gulp.task('js:compress', function() {
     return gulp.src('src/*.js')
 		.pipe(header(banner, {pkg : pkg}))
 		.pipe(uglify())
   		.pipe(rename({suffix: '.min'}))
 		.pipe(gulp.dest('dist/'));
 });
+
+gulp.task('js', ['js:copy', 'js:compress', 'js:async']);
 
 gulp.task('copy', function() {
     return gulp.src('dist/*.js')
@@ -66,7 +86,7 @@ gulp.task('example', function() {
 		.pipe(gulp.dest('example/js'));
 });
 
-gulp.task('server', ['js', 'copy', 'example'], function () {
+gulp.task('server', ['js', 'example'], function () {
       browserSync({
         notify: false,
         // https: true,
@@ -75,7 +95,7 @@ gulp.task('server', ['js', 'copy', 'example'], function () {
       });
 
       gulp.watch(['src/*'], function(){
-          runSequence('js', 'copy', 'example', 'compress', reload);
+          runSequence('js', 'copy', 'example', reload);
       });
       gulp.watch(['example/**/*'], ['example', reload]);
 });

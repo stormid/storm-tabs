@@ -1,6 +1,6 @@
 /**
  * @name storm-tabs: For multi-panelled content areas
- * @version 0.1.0: Fri, 19 Feb 2016 16:00:23 GMT
+ * @version 0.1.0: Wed, 22 Jun 2016 14:16:29 GMT
  * @author stormid
  * @license MIT
  */(function(root, factory) {
