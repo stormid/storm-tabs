@@ -61,7 +61,6 @@ gulp.task('js:async', function() {
   		.pipe(rename({suffix: '.async.min'}))
 		.pipe(gulp.dest('dist'));
 });
-
 gulp.task('js:compress', function() {
     return gulp.src('src/*.js')
 		.pipe(header(banner, {pkg : pkg}))
