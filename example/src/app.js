@@ -1,15 +1,7 @@
-var STORM = (function(w, d) {
-	'use strict';
-    
-    var Tabs = require('./libs/storm-tabs'),
-        init = function() {
-            Tabs.init('.js-tabs');
-        };
-	
-	return {
-		init: init
-	};
-	
-})(window, document, undefined);
+import Tabs from './libs/storm-tabs';
 
-if('addEventListener' in window) window.addEventListener('DOMContentLoaded', STORM.init, false);
+const onDOMContentLoadedTasks = [() => {
+	Tabs.init('.js-tabs');
+}];
+    
+if('addEventListener' in window) window.addEventListener('DOMContentLoaded', () => { onDOMContentLoadedTasks.forEach((fn) => fn()); });
