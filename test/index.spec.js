@@ -97,29 +97,4 @@ describe('Initialisation', () => {
 		Array.from(TabSet[0].targets[0].classList).should.not.containEql('active');
 	});
 
-	/*
-
-
-	it('should attach the handleClick eventListener to DOMElement click event to toggle parentNode className', () => {
-		TogglersLocal[0].btn.click();
-		setTimeout(() => {
-			Array.from(TogglersLocal[0].btn.parentNode.classList).should.containEql('active');
-			TogglersLocal[0].btn.click();
-			setTimeout(() => {
-				TogglersLocal.from(TogglersLocal[0].btn.parentNode.classList).should.not.containEql('active');
-			}, 1000);
-		});
-	});
-	
-	it('should pass an invokable callback as an option', () => {
-		TogglersNoDelay[0].settings.should.have.property('callback').Function();
-	});
-
-	it('should change sibling buttons aria expanded attribute', () => {
-		Togglers[0].btn.click();
-		setTimeout(() => {
-			Togglers[0].siblingBtns[0].getAttribute('aria-expanded').should.equal(true);
-		});
-	});
-	*/
 });
