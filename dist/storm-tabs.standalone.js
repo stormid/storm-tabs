@@ -1,6 +1,6 @@
 /**
  * @name storm-tabs: Multi-panelled content areas 
- * @version 0.6.0: Wed, 09 Nov 2016 16:53:29 GMT
+ * @version 0.6.0: Tue, 28 Feb 2017 22:24:37 GMT
  * @author mjbp
  * @license MIT
  */
@@ -222,9 +222,9 @@ var KEY_CODES = {
 
 		this.links[i].classList[methods[type].classlist](this.settings.currentClass);
 		this.targets[i].classList[methods[type].classlist](this.settings.currentClass);
-		this.targets[i].setAttribute('aria-hidden', !this.targets[i].getAttribute('aria-hidden'));
-		this.links[i].setAttribute('aria-selected', !this.targets[i].getAttribute('aria-selected'));
-		this.links[i].setAttribute('aria-expanded', !this.targets[i].getAttribute('aria-expanded'));
+		this.targets[i].setAttribute('aria-hidden', this.targets[i].getAttribute('aria-hidden') === 'true' ? 'false' : 'true');
+		this.links[i].setAttribute('aria-selected', this.links[i].getAttribute('aria-selected') === 'true' ? 'false' : 'true');
+		this.links[i].setAttribute('aria-expanded', this.links[i].getAttribute('aria-expanded') === 'true' ? 'false' : 'true');
 		methods[type].tabIndex.target.setAttribute('tabIndex', methods[type].tabIndex.value);
 	},
 	open: function open(i) {
