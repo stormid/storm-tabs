@@ -14,7 +14,9 @@
   "main": "dist/storm-tabs.min.js",
   "keywords": [
     "stormid",
+    "component",
     "tabs",
+    "tab",
     "UI"
   ],
   "scripts": {
