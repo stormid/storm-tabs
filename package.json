@@ -2,7 +2,7 @@
   "name": "storm-tabs",
   "version": "0.6.0",
   "description": "Multi-panelled content areas ",
-  "author": "mjbp",
+  "author": "stormid",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -15,7 +15,8 @@
   "keywords": [
     "stormid",
     "tabs",
-    "UI"
+    "UI",
+    "component"
   ],
   "scripts": {
     "build": "gulp build",

@@ -6,11 +6,22 @@
 
 Multi-panelled content areas 
 
+##Example
+[https://mjbp.github.io/storm-tabs](https://mjbp.github.io/storm-tabs)
+
 ##Usage
 HTML
 ```
-<a href="#target" class="js-toggler"></a>
-<div id="target"></div>
+<div class="js-tabs tabs">
+    <nav class="tabs__nav">
+        <a class="tabs__nav-link js-tabs__link" href="#1">Tab 1</a>
+        <a class="tabs__nav-link js-tabs__link" href="#2">Tab 2</a>
+        <a class="tabs__nav-link js-tabs__link" href="#3">Tab 3</a>
+    </nav>
+    <section id="1" class="tabs__section">Tab 1</section>
+    <section id="2" class="tabs__section">Tab 2</section>
+    <section id="3" class="tabs__section">Tab 3</section>
+</div>
 ```
 
 JS
@@ -39,17 +50,12 @@ var Tabs = require('./libs/storm-tabs');
 Tabs.init('.js-tabs');
 ```
 
-
-##Example
-[https://mjbp.github.io/storm-tabs](https://mjbp.github.io/storm-tabs)
-
-
 ##Options
 ```
     {
-		delay: 0,
-		targetLocal: false,
-		callback: null
+		titleClass: '.js-tabs__link',
+		currentClass: 'active',
+		active: 0
     }
 ```
 
@@ -57,11 +63,6 @@ e.g.
 ```
 Tabs.init('.js-tabs',);
 ```
-
-
-##API
-####`Tabs.init(selector, opts)`
-Initialise the module with a DOM selector and  options object
 
 
 ##Tests
