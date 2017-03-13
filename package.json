@@ -14,9 +14,12 @@
   "main": "dist/storm-tabs.min.js",
   "keywords": [
     "stormid",
+    "component",
     "tabs",
     "UI",
-    "component"
+    "component",
+    "tab",
+    "UI"
   ],
   "scripts": {
     "build": "gulp build",
