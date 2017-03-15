@@ -50,6 +50,24 @@ var Tabs = require('./libs/storm-tabs');
 Tabs.init('.js-tabs');
 ```
 
+CSS
+Sample minimum CSS required to show/hide each section
+
+```
+.tabs__section {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    visibility: hidden;
+}
+.tabs__section.active {
+    position: relative;
+    clip:auto;
+    padding:2rem;
+    background:#eee;
+    visibility: visible;
+}
+```
+
 ##Options
 ```
 {
