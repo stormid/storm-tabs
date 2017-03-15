@@ -1,7 +1,7 @@
 {
   "name": "storm-tabs",
   "version": "0.6.0",
-  "description": "Multi-panelled content areas ",
+  "description": "Multi-panelled content areas",
   "author": "stormid",
   "license": "MIT",
   "repository": {
@@ -11,7 +11,7 @@
   "bugs": {
     "url": "https://github.com/mjbp/storm-tabs/issues"
   },
-  "main": "dist/storm-tabs.min.js",
+  "main": "dist/storm-tabs.js",
   "keywords": [
     "stormid",
     "component",

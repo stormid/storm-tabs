@@ -52,18 +52,17 @@ Tabs.init('.js-tabs');
 
 ##Options
 ```
-    {
-		titleClass: '.js-tabs__link',
-		currentClass: 'active',
-		active: 0
-    }
+{
+    titleClass: '.js-tabs__link',
+    currentClass: 'active',
+    active: 0
+}
 ```
 
 e.g.
 ```
 Tabs.init('.js-tabs',);
 ```
-
 
 ##Tests
 ```

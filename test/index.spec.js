@@ -97,4 +97,81 @@ describe('Initialisation', () => {
 		Array.from(TabSet[0].targets[0].classList).should.not.containEql('active');
 	});
 
+	/*
+	 * Write what we expect for each of th keyboard interactions
+	 */
+	it('should attach keydown eventListener to each tab', () => {
+		
+		//trigger
+		TabSet[0].links[0].dispatchEvent(
+			new window.KeyboardEvent('keydown', { 
+				code : 32,
+				keyCode: 32
+			})
+		);
+
+		let tabDownEvt = new window.KeyboardEvent('keydown', {
+			key : 'Tab',
+			keyCode: 9
+		});
+
+
+		TabSet[0].links[0].dispatchEvent(
+			new window.KeyboardEvent('keydown', { 
+				code : 13,
+				keyCode: 13
+			})
+		);
+
+		TabSet[0].links[0].click();
+
+		TabSet[0].links[0].dispatchEvent(tabDownEvt);
+
+		//TabSet[0].focusableChildren[0].dispatchEvent(tabDownEvt);
+
+		TabSet[0].links[0].dispatchEvent(
+			new window.KeyboardEvent('keydown', { 
+				key : 'Tab',
+				keyCode: 9,
+				shiftKey: true
+			})
+		);
+
+		TabSet[0].links[0].dispatchEvent(
+			new window.KeyboardEvent('keydown', { 
+				code : 13,
+				keyCode: 13
+			})
+		);
+
+		TabSet[0].links[0].dispatchEvent(
+			new window.KeyboardEvent('keydown', { 
+				code : 37,
+				keyCode: 37
+			})
+		);
+		
+		TabSet[0].links[0].dispatchEvent(
+			new window.KeyboardEvent('keydown', { 
+				code : 39,
+				keyCode: 39
+			})
+		);
+
+		TabSet[0].links[0].dispatchEvent(
+			new window.KeyboardEvent('keydown', { 
+				code : 38,
+				keyCode: 38
+			})
+		);
+
+		TabSet[0].links[0].dispatchEvent(
+			new window.KeyboardEvent('keydown', { 
+				code : 40,
+				keyCode: 40
+			})
+		);
+		
+	});
+
 });
