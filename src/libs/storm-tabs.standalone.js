@@ -1,7 +1,7 @@
 /**
- * @name storm-tabs: Multi-panelled content areas 
- * @version 0.6.0: Tue, 28 Feb 2017 22:24:37 GMT
- * @author mjbp
+ * @name storm-tabs: For multi-panelled content areas
+ * @version 0.6.0: Fri, 17 Mar 2017 17:49:49 GMT
+ * @author stormid
  * @license MIT
  */
 (function(root, factory) {
