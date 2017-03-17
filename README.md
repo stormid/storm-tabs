@@ -1,4 +1,4 @@
-#Storm tabs
+# Storm tabs
 
 [![Build Status](https://travis-ci.org/mjbp/storm-tabs.svg?branch=master)](https://travis-ci.org/mjbp/storm-tabs)
 [![codecov.io](http://codecov.io/github/mjbp/storm-tabs/coverage.svg?branch=master)](http://codecov.io/github/mjbp/storm-tabs?branch=master)
@@ -6,10 +6,10 @@
 
 Multi-panelled content areas 
 
-##Example
+## Example
 [https://mjbp.github.io/storm-tabs](https://mjbp.github.io/storm-tabs)
 
-##Usage
+## Usage
 HTML
 ```
 <div class="js-tabs tabs">
@@ -68,7 +68,7 @@ Sample minimum CSS required to show/hide each section
 }
 ```
 
-##Options
+## Options
 ```
 {
     titleClass: '.js-tabs__link',
@@ -82,18 +82,18 @@ e.g.
 Tabs.init('.js-tabs',);
 ```
 
-##Tests
+## Tests
 ```
 npm run test
 ```
 
-##Browser support
+## Browser support
 This is module has both es6 and es5 distributions. The es6 version should be used in a workflow that transpiles.
 
 The es5 version depends unpon Object.assign, element.classList, and Promises so all evergreen browsers are supported out of the box, ie9+ is supported with polyfills. ie8+ will work with even more polyfils for Array functions and eventListeners.
 
-##Dependencies
+## Dependencies
 None
 
-##License
+## License
 MIT
