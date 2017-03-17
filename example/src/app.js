@@ -1,23 +1,7 @@
-var UTILS = {
-		attributelist: require('storm-attributelist')
-	},
-	UI = (function(w, d) {
-		'use strict';
+import Tabs from './libs/storm-tabs';
 
-		var Tabs = require('./libs/storm-tabs'),
-			init = function() {
-				Tabs.init('.js-tabs');
-			};
-
-		return {
-			init: init
-		};
-
-	})(window, document, undefined);
-
-global.STORM = {
-    UTILS: UTILS,
-    UI: UI
-};
-
-if('addEventListener' in window) window.addEventListener('DOMContentLoaded', STORM.UI.init, false);
+const onDOMContentLoadedTasks = [() => {
+	Tabs.init('.js-tabs');
+}];
+    
+if('addEventListener' in window) window.addEventListener('DOMContentLoaded', () => { onDOMContentLoadedTasks.forEach((fn) => fn()); });
