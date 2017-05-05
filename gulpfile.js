@@ -10,6 +10,9 @@ var gulp = require('gulp'),
 	uglify = require('gulp-uglify'),
 	rename = require('gulp-rename'),
 	babel = require('gulp-babel'),
+	rollup = require('gulp-rollup'),
+	rollupNodeResolve = require('rollup-plugin-node-resolve'),
+    commonjs = require('rollup-plugin-commonjs'),
 	browserify = require('browserify'),
 	source = require('vinyl-source-stream'),
 	buffer = require('vinyl-buffer'),
@@ -77,48 +80,57 @@ gulp.task('js:es5', function() {
             template: umdTemplate
         }))
         .pipe(header(banner, {pkg : pkg}))
-  		.pipe(rename({suffix: '.standalone'}))
+  		.pipe(rename({
+            basename: pkg.name,
+            suffix: '.standalone'
+        }))
 		.pipe(gulp.dest('dist/'));
 });
 
-gulp.task('js:async', function() {
-    return gulp.src('src/*.js')
-        .pipe(header(banner, {pkg : pkg}))
-		.pipe(browserify({
-          insertGlobals : true,
-          debug : false,
-		  standalone: componentName()
+gulp.task('js:es5-rollup', function() {
+	return gulp.src('src/index.js')
+        .pipe(rollup({
+			allowRealFiles: true,
+            entry: 'src/index.js',
+			format: 'es',
+			plugins: [
+				rollupNodeResolve(),
+                commonjs()
+			]
         }))
-		.pipe(uglify())
-  		.pipe(rename({suffix: '.async.min'}))
-		.pipe(gulp.dest('dist'));
-});
-gulp.task('js:compress', function() {
-    return gulp.src('src/*.js')
-        .pipe(header(banner, {pkg : pkg}))
-		.pipe(browserify({
-          insertGlobals : true,
-          debug : false,
-		  standalone: componentName()
+        .pipe(babel({
+			presets: ['es2015']
+		}))
+        .pipe(wrap({
+            namespace: componentName(),
+            template: umdTemplate
         }))
-		.pipe(uglify())
-  		.pipe(rename({suffix: '.async.min'}))
-		.pipe(gulp.dest('dist'));
+        .pipe(header(banner, {pkg : pkg}))
+  		.pipe(rename({
+            basename: pkg.name,
+            suffix: '.standalone'
+        }))
+		.pipe(gulp.dest('dist/'));
 });
 
 gulp.task('js:es6', function() {
-    return gulp.src('src/*.js')
+    gulp.src('src/*.js')
         .pipe(plumber({errorHandler: onError}))
         .pipe(header(banner, {pkg : pkg}))
 		.pipe(gulp.dest('dist/'));
+
+    return gulp.src('./src/lib/*.js')
+		.pipe(gulp.dest('./dist/lib/'));
 });
 
-gulp.task('js', ['js:es6', 'js:es5']);
+gulp.task('js', ['js:es6', 'js:es5-rollup']);
+
 
 gulp.task('copy', function() {
-    return gulp.src('./dist/*.js')
-		.pipe(gulp.dest('./example/src/libs/'));
+    return gulp.src('./src/**/*.js')
+		.pipe(gulp.dest('./example/src/libs/component'));
 });
+
 
 gulp.task('example:import', function(){
     return browserify({
@@ -131,6 +143,7 @@ gulp.task('example:import', function(){
         .pipe(buffer())
         .pipe(gulp.dest('./example/js'));
 });
+
 gulp.task('example:async', function(){
     return gulp.src('./dist/*.js')
 		.pipe(gulp.dest('./example/js/'));

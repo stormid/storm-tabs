@@ -1,6 +1,6 @@
 import should from 'should';
-import Tabs from '../dist/storm-tabs';
 import 'jsdom-global/register';
+import Tabs from '../dist/storm-tabs.standalone';
 
 const html = `<div class="js-tabs tabs">
 				<nav class="tabs__nav">
