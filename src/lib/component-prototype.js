@@ -10,24 +10,14 @@ const KEY_CODES = {
 
 export default {
     init() {
-        let hash = location.hash.slice(1) || null;
+        let hash = location.hash.slice(1) || false;
 
         this.links = [].slice.call(this.DOMElement.querySelectorAll(this.settings.titleClass));
-        this.targets = this.links.map(el => {
-            return document.getElementById(el.getAttribute('href').substr(1)) || console.error('Tab target not found');
-        });
-
+        this.targets = this.links.map(el => document.getElementById(el.getAttribute('href').substr(1)) || console.error('Tab target not found'));
         !!this.links.length && this.links[0].parentNode.setAttribute('role', 'tablist');
-
         this.current = this.settings.active;
 
-        if (hash) {
-            this.targets.forEach((target, i) => {
-                if (target.getAttribute('id') === hash) {
-                    this.current = i;
-                }
-            });
-        }
+        if (hash) this.targets.every((target, i) => { if (target.getAttribute('id') === hash) this.current = i; });
 
         this.initAria()
             .initTitles()
@@ -41,19 +31,24 @@ export default {
             el.setAttribute('aria-expanded', false);
             el.setAttribute('aria-selected', false);
             el.setAttribute('aria-controls', this.targets[i].getAttribute('id'));
-        });
-
-        this.targets.forEach(el => {
-            el.setAttribute('role', 'tabpanel');
-            el.setAttribute('aria-hidden', true);
-            el.setAttribute('tabIndex', '-1');
+            this.targets[i].setAttribute('role', 'tabpanel');
+            this.targets[i].setAttribute('aria-hidden', true);
+            this.targets[i].setAttribute('tabIndex', '-1');
         });
         return this;
     },
     initTitles() {
         let handler = i => {
-            this.toggle(i);
-        };
+                this.toggle(i);
+            },
+            next = () => {
+                this.toggle((this.current === this.links.length - 1 ? 0 : this.current + 1));
+                window.setTimeout(() => { this.links[this.current].focus(); }, 16);
+            },
+            previous = () => {
+                this.toggle((this.current === 0 ? this.links.length - 1 : this.current - 1));
+                window.setTimeout(() => { this.links[this.current].focus(); }, 16);
+            };
 
         this.lastFocusedTab = 0;
 
@@ -63,21 +58,17 @@ export default {
                 switch (e.keyCode) {
                 case KEY_CODES.UP:
                     e.preventDefault();
-                    this.toggle((this.current === 0 ? this.links.length - 1 : this.current - 1));
-                    window.setTimeout(() => { this.links[this.current].focus(); }, 16);
+                    previous();
                     break;
                 case KEY_CODES.LEFT:
-                    this.toggle((this.current === 0 ? this.links.length - 1 : this.current - 1));
-                    window.setTimeout(() => { this.links[this.current].focus(); }, 16);
+                    previous();
                     break;
                 case KEY_CODES.DOWN:
                     e.preventDefault();
-                    this.toggle((this.current === this.links.length - 1 ? 0 : this.current + 1));
-                    window.setTimeout(() => { this.links[this.current].focus(); }, 16);
+                    next();
                     break;
                 case KEY_CODES.RIGHT:
-                    this.toggle((this.current === this.links.length - 1 ? 0 : this.current + 1));
-                    window.setTimeout(() => { this.links[this.current].focus(); }, 16);
+                    next();
                     break;
                 case KEY_CODES.ENTER:
                     handler.call(this, i);
@@ -96,12 +87,9 @@ export default {
                     handler.call(this, i);
                     break;
                 default:
-                        //
                     break;
                 }
             });
-
-            //toggle
             el.addEventListener('click', e => {
                 e.preventDefault();
                 handler.call(this, i);  
@@ -111,9 +99,7 @@ export default {
         return this;
     },
     getLinkIndex(link){
-        for(let i = 0; i < this.links.length; i++){
-            if(link === this.links[i]) return i;
-        }
+        for(let i = 0; i < this.links.length; i++) if(link === this.links[i]) return i;
         return null;
     },
     getFocusableChildren(node) {
@@ -122,20 +108,17 @@ export default {
     },
     setTargetFocus(tabIndex){
         this.focusableChildren = this.getFocusableChildren(this.targets[tabIndex]);
+        if(!this.focusableChildren.length) return;
         
-        if(this.focusableChildren.length){
-            window.setTimeout(function(){
-                this.focusableChildren[0].focus();
-                this.keyEventListener = this.keyListener.bind(this);
-                
-                document.addEventListener('keydown', this.keyEventListener);
-            }.bind(this), 0);
-        }
+        window.setTimeout(function(){
+            this.focusableChildren[0].focus();
+            this.keyEventListener = this.keyListener.bind(this);
+            
+            document.addEventListener('keydown', this.keyEventListener);
+        }.bind(this), 0);
     },
     keyListener(e){
-        if (e.keyCode !== KEY_CODES.TAB) {
-            return;
-        }
+        if (e.keyCode !== KEY_CODES.TAB) return;
         let focusedIndex = this.focusableChildren.indexOf(document.activeElement);
         
         if(focusedIndex < 0) {
@@ -195,15 +178,15 @@ export default {
     },
     toggle(i) {
         if(this.current === i) return;
-
+        
         window.history.pushState({ URL: this.links[i].getAttribute('href') }, '', this.links[i].getAttribute('href'));
 
         if(this.current === null) {
             this.open(i);
-            return this;
+        } else {
+            this.close(this.current)
+                .open(i);
         }
-        this.close(this.current)
-            .open(i);
 
         return this;
     }
