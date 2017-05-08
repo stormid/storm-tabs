@@ -1,6 +1,6 @@
 /**
  * @name storm-tabs: For multi-panelled content areas
- * @version 1.0.2: Sun, 07 May 2017 15:31:53 GMT
+ * @version 1.0.3: Mon, 08 May 2017 10:04:49 GMT
  * @author stormid
  * @license MIT
  */
@@ -43,24 +43,18 @@ var componentPrototype = {
     init: function init() {
         var _this = this;
 
-        var hash = location.hash.slice(1) || null;
+        var hash = location.hash.slice(1) || false;
 
         this.links = [].slice.call(this.DOMElement.querySelectorAll(this.settings.titleClass));
         this.targets = this.links.map(function (el) {
             return document.getElementById(el.getAttribute('href').substr(1)) || console.error('Tab target not found');
         });
-
         !!this.links.length && this.links[0].parentNode.setAttribute('role', 'tablist');
-
         this.current = this.settings.active;
 
-        if (hash) {
-            this.targets.forEach(function (target, i) {
-                if (target.getAttribute('id') === hash) {
-                    _this.current = i;
-                }
-            });
-        }
+        if (hash !== false) this.targets.forEach(function (target, i) {
+            if (target.getAttribute('id') === hash) _this.current = i;
+        });
 
         this.initAria().initTitles().open(this.current);
 
@@ -74,84 +68,70 @@ var componentPrototype = {
             el.setAttribute('aria-expanded', false);
             el.setAttribute('aria-selected', false);
             el.setAttribute('aria-controls', _this2.targets[i].getAttribute('id'));
-        });
-
-        this.targets.forEach(function (el) {
-            el.setAttribute('role', 'tabpanel');
-            el.setAttribute('aria-hidden', true);
-            el.setAttribute('tabIndex', '-1');
+            _this2.targets[i].setAttribute('role', 'tabpanel');
+            _this2.targets[i].setAttribute('aria-hidden', true);
+            _this2.targets[i].setAttribute('tabIndex', '-1');
         });
         return this;
     },
     initTitles: function initTitles() {
         var _this3 = this;
 
-        var handler = function handler(i) {
-            _this3.toggle(i);
+        var change = function change(id) {
+            _this3.toggle(id);
+            window.setTimeout(function () {
+                _this3.links[_this3.current].focus();
+            }, 16);
+        },
+            nextId = function nextId() {
+            return _this3.current === _this3.links.length - 1 ? 0 : _this3.current + 1;
+        },
+            previousId = function previousId() {
+            return _this3.current === 0 ? _this3.links.length - 1 : _this3.current - 1;
         };
 
         this.lastFocusedTab = 0;
 
         this.links.forEach(function (el, i) {
-            //navigate
             el.addEventListener('keydown', function (e) {
                 switch (e.keyCode) {
                     case KEY_CODES.UP:
                         e.preventDefault();
-                        _this3.toggle(_this3.current === 0 ? _this3.links.length - 1 : _this3.current - 1);
-                        window.setTimeout(function () {
-                            _this3.links[_this3.current].focus();
-                        }, 16);
+                        change.call(_this3, previousId());
                         break;
                     case KEY_CODES.LEFT:
-                        _this3.toggle(_this3.current === 0 ? _this3.links.length - 1 : _this3.current - 1);
-                        window.setTimeout(function () {
-                            _this3.links[_this3.current].focus();
-                        }, 16);
+                        change.call(_this3, previousId());
                         break;
                     case KEY_CODES.DOWN:
                         e.preventDefault();
-                        _this3.toggle(_this3.current === _this3.links.length - 1 ? 0 : _this3.current + 1);
-                        window.setTimeout(function () {
-                            _this3.links[_this3.current].focus();
-                        }, 16);
+                        change.call(_this3, nextId());
                         break;
                     case KEY_CODES.RIGHT:
-                        _this3.toggle(_this3.current === _this3.links.length - 1 ? 0 : _this3.current + 1);
-                        window.setTimeout(function () {
-                            _this3.links[_this3.current].focus();
-                        }, 16);
+                        change.call(_this3, nextId());
                         break;
                     case KEY_CODES.ENTER:
-                        handler.call(_this3, i);
-                        window.setTimeout(function () {
-                            _this3.links[i].focus();
-                        }, 16);
+                        change.call(_this3, i);
                         break;
                     case KEY_CODES.SPACE:
                         e.preventDefault();
-                        handler.call(_this3, i);
-                        window.setTimeout(function () {
-                            _this3.links[i].focus();
-                        }, 16);
+                        change.call(_this3, i);
                         break;
                     case KEY_CODES.TAB:
+                        if (!_this3.getFocusableChildren(_this3.targets[i]).length) return;
+
                         e.preventDefault();
                         e.stopPropagation();
                         _this3.lastFocusedTab = _this3.getLinkIndex(e.target);
                         _this3.setTargetFocus(_this3.lastFocusedTab);
-                        handler.call(_this3, i);
+                        change.call(_this3, i);
                         break;
                     default:
-                        //
                         break;
                 }
             });
-
-            //toggle
             el.addEventListener('click', function (e) {
                 e.preventDefault();
-                handler.call(_this3, i);
+                change.call(_this3, i);
             }, false);
         });
 
@@ -160,8 +140,7 @@ var componentPrototype = {
     getLinkIndex: function getLinkIndex(link) {
         for (var i = 0; i < this.links.length; i++) {
             if (link === this.links[i]) return i;
-        }
-        return null;
+        }return null;
     },
     getFocusableChildren: function getFocusableChildren(node) {
         var focusableElements = ['a[href]', 'area[href]', 'input:not([disabled])', 'select:not([disabled])', 'textarea:not([disabled])', 'button:not([disabled])', 'iframe', 'object', 'embed', '[contenteditable]', '[tabIndex]:not([tabIndex="-1"])'];
@@ -169,20 +148,17 @@ var componentPrototype = {
     },
     setTargetFocus: function setTargetFocus(tabIndex) {
         this.focusableChildren = this.getFocusableChildren(this.targets[tabIndex]);
+        if (!this.focusableChildren.length) return false;
 
-        if (this.focusableChildren.length) {
-            window.setTimeout(function () {
-                this.focusableChildren[0].focus();
-                this.keyEventListener = this.keyListener.bind(this);
+        window.setTimeout(function () {
+            this.focusableChildren[0].focus();
+            this.keyEventListener = this.keyListener.bind(this);
 
-                document.addEventListener('keydown', this.keyEventListener);
-            }.bind(this), 0);
-        }
+            document.addEventListener('keydown', this.keyEventListener);
+        }.bind(this), 0);
     },
     keyListener: function keyListener(e) {
-        if (e.keyCode !== KEY_CODES.TAB) {
-            return;
-        }
+        if (e.keyCode !== KEY_CODES.TAB) return;
         var focusedIndex = this.focusableChildren.indexOf(document.activeElement);
 
         if (focusedIndex < 0) {
@@ -241,13 +217,9 @@ var componentPrototype = {
     toggle: function toggle(i) {
         if (this.current === i) return;
 
-        window.history.pushState({ URL: this.links[i].getAttribute('href') }, '', this.links[i].getAttribute('href'));
+        window.history && window.history.pushState({ URL: this.links[i].getAttribute('href') }, '', this.links[i].getAttribute('href'));
 
-        if (this.current === null) {
-            this.open(i);
-            return this;
-        }
-        this.close(this.current).open(i);
+        if (this.current === null) this.open(i);else this.close(this.current).open(i);
 
         return this;
     }

@@ -158,7 +158,7 @@ gulp.task('server', ['js', 'copy', 'example'], function() {
         tunnel: false
     });
 
-      gulp.watch(['src/*'], function(){
+      gulp.watch(['src/**/*.js'], function(){
           runSequence('js', 'copy', 'example', reload);
       });
       gulp.watch(['example/**/*'], ['example', reload]);

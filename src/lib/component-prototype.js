@@ -17,7 +17,7 @@ export default {
         !!this.links.length && this.links[0].parentNode.setAttribute('role', 'tablist');
         this.current = this.settings.active;
 
-        if (hash) this.targets.every((target, i) => { if (target.getAttribute('id') === hash) this.current = i; });
+        if(hash !== false) this.targets.forEach((target, i) => { if (target.getAttribute('id') === hash) this.current = i; });
 
         this.initAria()
             .initTitles()
@@ -38,53 +38,47 @@ export default {
         return this;
     },
     initTitles() {
-        let handler = i => {
-                this.toggle(i);
-            },
-            next = () => {
-                this.toggle((this.current === this.links.length - 1 ? 0 : this.current + 1));
+        let change = id => {
+                this.toggle(id);
                 window.setTimeout(() => { this.links[this.current].focus(); }, 16);
             },
-            previous = () => {
-                this.toggle((this.current === 0 ? this.links.length - 1 : this.current - 1));
-                window.setTimeout(() => { this.links[this.current].focus(); }, 16);
-            };
+            nextId = () => (this.current === this.links.length - 1 ? 0 : this.current + 1),
+            previousId = () => (this.current === 0 ? this.links.length - 1 : this.current - 1);
 
         this.lastFocusedTab = 0;
 
         this.links.forEach((el, i) => {
-            //navigate
             el.addEventListener('keydown', e => {
                 switch (e.keyCode) {
                 case KEY_CODES.UP:
                     e.preventDefault();
-                    previous();
+                    change.call(this, previousId());
                     break;
                 case KEY_CODES.LEFT:
-                    previous();
+                    change.call(this, previousId());
                     break;
                 case KEY_CODES.DOWN:
                     e.preventDefault();
-                    next();
+                    change.call(this, nextId());
                     break;
                 case KEY_CODES.RIGHT:
-                    next();
+                    change.call(this, nextId());
                     break;
                 case KEY_CODES.ENTER:
-                    handler.call(this, i);
-                    window.setTimeout(() => { this.links[i].focus(); }, 16);
+                    change.call(this, i);
                     break;
                 case KEY_CODES.SPACE:
                     e.preventDefault();
-                    handler.call(this, i);
-                    window.setTimeout(() => { this.links[i].focus(); }, 16);
+                    change.call(this, i);
                     break;
                 case KEY_CODES.TAB:
+                    if(!this.getFocusableChildren(this.targets[i]).length) return;
+
                     e.preventDefault();
                     e.stopPropagation();
                     this.lastFocusedTab = this.getLinkIndex(e.target);
                     this.setTargetFocus(this.lastFocusedTab);
-                    handler.call(this, i);
+                    change.call(this, i);
                     break;
                 default:
                     break;
@@ -92,7 +86,7 @@ export default {
             });
             el.addEventListener('click', e => {
                 e.preventDefault();
-                handler.call(this, i);  
+                change.call(this, i);  
             }, false);
         });
 
@@ -108,7 +102,7 @@ export default {
     },
     setTargetFocus(tabIndex){
         this.focusableChildren = this.getFocusableChildren(this.targets[tabIndex]);
-        if(!this.focusableChildren.length) return;
+        if(!this.focusableChildren.length) return false;
         
         window.setTimeout(function(){
             this.focusableChildren[0].focus();
@@ -179,14 +173,10 @@ export default {
     toggle(i) {
         if(this.current === i) return;
         
-        window.history.pushState({ URL: this.links[i].getAttribute('href') }, '', this.links[i].getAttribute('href'));
+        window.history && window.history.pushState({ URL: this.links[i].getAttribute('href') }, '', this.links[i].getAttribute('href'));
 
-        if(this.current === null) {
-            this.open(i);
-        } else {
-            this.close(this.current)
-                .open(i);
-        }
+        if(this.current === null) this.open(i);
+        else this.close(this.current).open(i);
 
         return this;
     }
