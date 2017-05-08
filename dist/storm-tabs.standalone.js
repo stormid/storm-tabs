@@ -1,6 +1,6 @@
 /**
  * @name storm-tabs: For multi-panelled content areas
- * @version 1.0.3: Mon, 08 May 2017 10:04:49 GMT
+ * @version 1.0.4: Mon, 08 May 2017 10:22:23 GMT
  * @author stormid
  * @license MIT
  */
@@ -181,29 +181,12 @@ var componentPrototype = {
         }
     },
     change: function change(type, i) {
-        var methods = {
-            open: {
-                classlist: 'add',
-                tabIndex: {
-                    target: this.targets[i],
-                    value: '0'
-                }
-            },
-            close: {
-                classlist: 'remove',
-                tabIndex: {
-                    target: this.targets[this.current],
-                    value: '-1'
-                }
-            }
-        };
-
-        this.links[i].classList[methods[type].classlist](this.settings.currentClass);
-        this.targets[i].classList[methods[type].classlist](this.settings.currentClass);
+        this.links[i].classList[type === 'open' ? 'add' : 'remove'](this.settings.currentClass);
+        this.targets[i].classList[type === 'open' ? 'add' : 'remove'](this.settings.currentClass);
         this.targets[i].setAttribute('aria-hidden', this.targets[i].getAttribute('aria-hidden') === 'true' ? 'false' : 'true');
         this.links[i].setAttribute('aria-selected', this.links[i].getAttribute('aria-selected') === 'true' ? 'false' : 'true');
         this.links[i].setAttribute('aria-expanded', this.links[i].getAttribute('aria-expanded') === 'true' ? 'false' : 'true');
-        methods[type].tabIndex.target.setAttribute('tabIndex', methods[type].tabIndex.value);
+        (type === 'open' ? this.targets[i] : this.targets[this.current]).setAttribute('tabIndex', type === 'open' ? '0' : '-1');
     },
     open: function open(i) {
         this.change('open', i);
