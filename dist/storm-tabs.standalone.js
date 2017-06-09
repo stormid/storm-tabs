@@ -1,6 +1,6 @@
 /**
  * @name storm-tabs: For multi-panelled content areas
- * @version 1.0.4: Mon, 08 May 2017 10:22:23 GMT
+ * @version 1.0.5: Fri, 09 Jun 2017 10:07:44 GMT
  * @author stormid
  * @license MIT
  */
@@ -216,7 +216,7 @@ var init = function init(sel, opts) {
     return els.map(function (el) {
         return Object.assign(Object.create(componentPrototype), {
             DOMElement: el,
-            settings: Object.assign({}, defaults, opts)
+            settings: Object.assign({}, defaults, el.dataset, opts)
         }).init();
     });
 };
