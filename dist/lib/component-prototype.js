@@ -72,13 +72,12 @@ export default {
                     change.call(this, i);
                     break;
                 case KEY_CODES.TAB:
-                    if(!this.getFocusableChildren(this.targets[i]).length) return;
+                    if(!this.getFocusableChildren(this.targets[i]).length || this.current !== i) return;
 
                     e.preventDefault();
                     e.stopPropagation();
                     this.lastFocusedTab = this.getLinkIndex(e.target);
                     this.setTargetFocus(this.lastFocusedTab);
-                    change.call(this, i);
                     break;
                 default:
                     break;
@@ -109,7 +108,7 @@ export default {
             this.keyEventListener = this.keyListener.bind(this);
             
             document.addEventListener('keydown', this.keyEventListener);
-        }.bind(this), 0);
+        }.bind(this), 1);
     },
     keyListener(e){
         if (e.keyCode !== KEY_CODES.TAB) return;

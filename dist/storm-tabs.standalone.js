@@ -1,6 +1,6 @@
 /**
  * @name storm-tabs: For multi-panelled content areas
- * @version 1.0.5: Fri, 09 Jun 2017 10:07:44 GMT
+ * @version 1.1.0: Tue, 12 Sep 2017 14:00:51 GMT
  * @author stormid
  * @license MIT
  */
@@ -117,13 +117,12 @@ var componentPrototype = {
                         change.call(_this3, i);
                         break;
                     case KEY_CODES.TAB:
-                        if (!_this3.getFocusableChildren(_this3.targets[i]).length) return;
+                        if (!_this3.getFocusableChildren(_this3.targets[i]).length || _this3.current !== i) return;
 
                         e.preventDefault();
                         e.stopPropagation();
                         _this3.lastFocusedTab = _this3.getLinkIndex(e.target);
                         _this3.setTargetFocus(_this3.lastFocusedTab);
-                        change.call(_this3, i);
                         break;
                     default:
                         break;
@@ -155,7 +154,7 @@ var componentPrototype = {
             this.keyEventListener = this.keyListener.bind(this);
 
             document.addEventListener('keydown', this.keyEventListener);
-        }.bind(this), 0);
+        }.bind(this), 1);
     },
     keyListener: function keyListener(e) {
         if (e.keyCode !== KEY_CODES.TAB) return;
