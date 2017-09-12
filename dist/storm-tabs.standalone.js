@@ -1,6 +1,6 @@
 /**
  * @name storm-tabs: For multi-panelled content areas
- * @version 1.1.0: Tue, 12 Sep 2017 14:00:51 GMT
+ * @version 1.1.1: Tue, 12 Sep 2017 16:30:36 GMT
  * @author stormid
  * @license MIT
  */
@@ -117,7 +117,7 @@ var componentPrototype = {
                         change.call(_this3, i);
                         break;
                     case KEY_CODES.TAB:
-                        if (!_this3.getFocusableChildren(_this3.targets[i]).length || _this3.current !== i) return;
+                        if (!_this3.getFocusableChildren(_this3.targets[i]).length || _this3.current !== i || e.shiftKey) return;
 
                         e.preventDefault();
                         e.stopPropagation();
@@ -166,8 +166,10 @@ var componentPrototype = {
         }
 
         if (e.shiftKey && focusedIndex === 0) {
-            e.preventDefault();
-            this.focusableChildren[this.focusableChildren.length - 1].focus();
+            if (this.lastFocusedTab !== 0) {
+                e.preventDefault();
+                this.links[this.lastFocusedTab].focus();
+            }
         } else {
             if (!e.shiftKey && focusedIndex === this.focusableChildren.length - 1) {
                 document.removeEventListener('keydown', this.keyEventListener);
