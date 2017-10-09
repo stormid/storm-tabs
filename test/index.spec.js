@@ -4,44 +4,44 @@ import Tabs from '../dist/storm-tabs.standalone';
 
 const html = `<div class="js-tabs tabs">
 				<nav class="tabs__nav">
-					<a class="tabs__nav-link js-tabs__link" href="#1">Tab 1</a>
-					<a class="tabs__nav-link js-tabs__link" href="#2">Tab 2</a>
-					<a class="tabs__nav-link js-tabs__link" href="#3">Tab 3</a>
+					<a id="tab-1" class="tabs__nav-link js-tabs__link" href="#panel-1">Tab 1</a>
+					<a id="tab-2" class="tabs__nav-link js-tabs__link" href="#panel-2">Tab 2</a>
+					<a id="tab-3" class="tabs__nav-link js-tabs__link" href="#panel-3">Tab 3</a>
 				</nav>
-				<section id="1" class="tabs__section">Tab 1</section>
-				<section id="2" class="tabs__section">Tab 2</section>
-				<section id="3" class="tabs__section">Tab 3</section>
+				<section id="panel-1" class="tabs__section">Tab 1</section>
+				<section id="panel-2" class="tabs__section">Tab 2</section>
+				<section id="panel-3" class="tabs__section">Tab 3</section>
 			</div>
 			<div class="js-tabs tabs">
 				<nav class="tabs__nav">
-					<a class="tabs__nav-link js-tabs__link" href="#4">Tab 1</a>
-					<a class="tabs__nav-link js-tabs__link" href="#5">Tab 2</a>
-					<a class="tabs__nav-link js-tabs__link" href="#6">Tab 3</a>
+					<a id="tab-4" class="tabs__nav-link js-tabs__link" href="#panel-4">Tab 1</a>
+					<a id="tab-4" class="tabs__nav-link js-tabs__link" href="#panel-5">Tab 2</a>
+					<a id="tab-4" class="tabs__nav-link js-tabs__link" href="#panel-6">Tab 3</a>
 				</nav>
-				<section id="4" class="tabs__section">Tab 1</section>
-				<section id="5" class="tabs__section">Tab 2</section>
-				<section id="6" class="tabs__section">Tab 3</section>
+				<section id="panel-4" class="tabs__section">Tab 1</section>
+				<section id="panel-5" class="tabs__section">Tab 2</section>
+				<section id="panel-6" class="tabs__section">Tab 3</section>
 			</div>
 			<div class="js-tabs-2 tabs">
 				<nav class="tabs__nav">
-					<a class="tabs__nav-link js-tabs__link" href="#7">Tab 1</a>
-					<a class="tabs__nav-link js-tabs__link" href="#8">Tab 2</a>
-					<a class="tabs__nav-link js-tabs__link" href="#9">Tab 3</a>
+					<a id="tab-7" class="tabs__nav-link js-tabs__link" href="#panel-7">Tab 1</a>
+					<a id="tab-8" class="tabs__nav-link js-tabs__link" href="#panel-8">Tab 2</a>
+					<a id="tab-9" class="tabs__nav-link js-tabs__link" href="#panel-9">Tab 3</a>
 				</nav>
-				<section id="7" class="tabs__section">Tab 1</section>
-				<section id="8" class="tabs__section">Tab 2</section>
-				<section id="9" class="tabs__section">Tab 3</section>
+				<section id="panel-7" class="tabs__section">Tab 1</section>
+				<section id="panel-8" class="tabs__section">Tab 2</section>
+				<section id="panel-9" class="tabs__section">Tab 3</section>
 			</div>
 			<div class="js-tabs-3 tabs">
 				<nav class="tabs__nav">
-					<a class="tabs__nav-link js-tabs__link" href="#10">Tab 1</a>
-					<a class="tabs__nav-link js-tabs__link" href="#11">Tab 2</a>
-					<a class="tabs__nav-link js-tabs__link" href="#12">Tab 3</a>
-					<a class="tabs__nav-link js-tabs__link" href="#99">Tab 4</a>
+					<a id="tab-10" class="tabs__nav-link js-tabs__link" href="#panel-10">Tab 1</a>
+					<a id="tab-11" class="tabs__nav-link js-tabs__link" href="#panel-11">Tab 2</a>
+					<a id="tab-12" class="tabs__nav-link js-tabs__link" href="#panel-12">Tab 3</a>
+					<a id="tab-13" class="tabs__nav-link js-tabs__link" href="#panel-99">Tab 4</a>
 				</nav>
-				<section id="10" class="tabs__section">Tab 1</section>
-				<section id="11" class="tabs__section">Tab 2</section>
-				<section id="12" class="tabs__section">Tab 3</section>
+				<section id="panel-10" class="tabs__section">Tab 1</section>
+				<section id="panel-11" class="tabs__section">Tab 2</section>
+				<section id="panel-12" class="tabs__section">Tab 3</section>
 			</div>`;
 
 document.body.innerHTML = html;
@@ -64,7 +64,7 @@ describe('Initialisation', () => {
 		Tabs.init.bind(Tabs, '.js-err').should.throw();
 	});
 
-	it('should throw an error if any target elements are not found for each link', () => {
+	it('should throw an error if any panels are not found for each link', () => {
 		Tabs.init.bind(Tabs, '.js-tabs-3').should.throw();
 	});
 	
@@ -74,11 +74,8 @@ describe('Initialisation', () => {
 		TabSet[0].should.have.property('DOMElement');
 		TabSet[0].should.have.property('settings').Object();
 		TabSet[0].should.have.property('init').Function();
-		TabSet[0].should.have.property('initAria').Function();
-		TabSet[0].should.have.property('initTitles').Function();
-		TabSet[0].should.have.property('getLinkIndex').Function();
-		TabSet[0].should.have.property('getFocusableChildren').Function();
-		TabSet[0].should.have.property('keyListener').Function();
+		TabSet[0].should.have.property('initAttributes').Function();
+		TabSet[0].should.have.property('initTabs').Function();
 		TabSet[0].should.have.property('change').Function();
 		TabSet[0].should.have.property('open').Function();
 		TabSet[0].should.have.property('close').Function();
@@ -91,10 +88,10 @@ describe('Initialisation', () => {
 	});
 	
 	it('should attach the handleClick eventListener to each tab title click event to toggle documentElement className', () => {
-		TabSet[0].links[0].click();
-		Array.from(TabSet[0].targets[0].classList).should.containEql('active');
-		TabSet[0].links[1].click();
-		Array.from(TabSet[0].targets[0].classList).should.not.containEql('active');
+		TabSet[0].tabs[0].click();
+		Array.from(TabSet[0].panels[0].classList).should.containEql('active');
+		TabSet[0].tabs[1].click();
+		Array.from(TabSet[0].panels[0].classList).should.not.containEql('active');
 	});
 
 	/*
@@ -103,7 +100,7 @@ describe('Initialisation', () => {
 	it('should attach keydown eventListener to each tab', () => {
 		
 		//trigger
-		TabSet[0].links[0].dispatchEvent(
+		TabSet[0].tabs[0].dispatchEvent(
 			new window.KeyboardEvent('keydown', { 
 				code : 32,
 				keyCode: 32
@@ -116,20 +113,20 @@ describe('Initialisation', () => {
 		});
 
 
-		TabSet[0].links[0].dispatchEvent(
+		TabSet[0].tabs[0].dispatchEvent(
 			new window.KeyboardEvent('keydown', { 
 				code : 13,
 				keyCode: 13
 			})
 		);
 
-		TabSet[0].links[0].click();
+		TabSet[0].tabs[0].click();
 
-		TabSet[0].links[0].dispatchEvent(tabDownEvt);
+		TabSet[0].tabs[0].dispatchEvent(tabDownEvt);
 
 		//TabSet[0].focusableChildren[0].dispatchEvent(tabDownEvt);
 
-		TabSet[0].links[0].dispatchEvent(
+		TabSet[0].tabs[0].dispatchEvent(
 			new window.KeyboardEvent('keydown', { 
 				key : 'Tab',
 				keyCode: 9,
@@ -137,35 +134,35 @@ describe('Initialisation', () => {
 			})
 		);
 
-		TabSet[0].links[0].dispatchEvent(
+		TabSet[0].tabs[0].dispatchEvent(
 			new window.KeyboardEvent('keydown', { 
 				code : 13,
 				keyCode: 13
 			})
 		);
 
-		TabSet[0].links[0].dispatchEvent(
+		TabSet[0].tabs[0].dispatchEvent(
 			new window.KeyboardEvent('keydown', { 
 				code : 37,
 				keyCode: 37
 			})
 		);
 		
-		TabSet[0].links[0].dispatchEvent(
+		TabSet[0].tabs[0].dispatchEvent(
 			new window.KeyboardEvent('keydown', { 
 				code : 39,
 				keyCode: 39
 			})
 		);
 
-		TabSet[0].links[0].dispatchEvent(
+		TabSet[0].tabs[0].dispatchEvent(
 			new window.KeyboardEvent('keydown', { 
 				code : 38,
 				keyCode: 38
 			})
 		);
 
-		TabSet[0].links[0].dispatchEvent(
+		TabSet[0].tabs[0].dispatchEvent(
 			new window.KeyboardEvent('keydown', { 
 				code : 40,
 				keyCode: 40

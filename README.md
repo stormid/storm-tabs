@@ -14,13 +14,13 @@ HTML
 ```
 <div class="js-tabs tabs">
     <nav class="tabs__nav">
-        <a class="tabs__nav-link js-tabs__link" href="#1">Tab 1</a>
-        <a class="tabs__nav-link js-tabs__link" href="#2">Tab 2</a>
-        <a class="tabs__nav-link js-tabs__link" href="#3">Tab 3</a>
+        <a id="tab-1" class="tabs__nav-link js-tabs__link" href="#panel-1">Tab 1</a>
+        <a id="tab-2" class="tabs__nav-link js-tabs__link" href="#panel-2">Tab 2</a>
+        <a id="tab-3" class="tabs__nav-link js-tabs__link" href="#panel-3">Tab 3</a>
     </nav>
-    <section id="1" class="tabs__section">Tab 1</section>
-    <section id="2" class="tabs__section">Tab 2</section>
-    <section id="3" class="tabs__section">Tab 3</section>
+    <section id="panel-1" class="tabs__section">Panel 1</section>
+    <section id="panel-2" class="tabs__section">Panel 2</section>
+    <section id="panel-3" class="tabs__section">Panel 3</section>
 </div>
 ```
 
@@ -48,24 +48,6 @@ or es5 commonjs  (legacy, use the .standalone version in the /dist folder)
 var Tabs = require('./libs/storm-tabs');
 
 Tabs.init('.js-tabs');
-```
-
-CSS
-Sample minimum CSS required to show/hide each section
-
-```
-.tabs__section {
-    position: absolute;
-    clip: rect(0, 0, 0, 0);
-    visibility: hidden;
-}
-.tabs__section.active {
-    position: relative;
-    clip:auto;
-    padding:2rem;
-    background:#eee;
-    visibility: visible;
-}
 ```
 
 ## Options
