@@ -1,6 +1,6 @@
 /**
  * @name storm-tabs: For multi-panelled content areas
- * @version 1.1.2: Mon, 09 Oct 2017 10:32:26 GMT
+ * @version 1.2.0: Mon, 09 Oct 2017 11:02:17 GMT
  * @author stormid
  * @license MIT
  */
@@ -90,8 +90,6 @@ var componentPrototype = {
             previousId = function previousId() {
             return _this3.current === 0 ? _this3.tabs.length - 1 : _this3.current - 1;
         };
-
-        this.lastFocusedTab = 0;
 
         this.tabs.forEach(function (el, i) {
             el.addEventListener('keydown', function (e) {

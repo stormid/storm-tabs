@@ -46,8 +46,6 @@ export default {
             nextId = () => (this.current === this.tabs.length - 1 ? 0 : this.current + 1),
             previousId = () => (this.current === 0 ? this.tabs.length - 1 : this.current - 1);
 
-        this.lastFocusedTab = 0;
-
         this.tabs.forEach((el, i) => {
             el.addEventListener('keydown', e => {
                 switch (e.keyCode) {
