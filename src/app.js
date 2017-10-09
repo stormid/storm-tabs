@@ -1,4 +1,4 @@
-import Tabs from './libs/storm-tabs';
+import Tabs from './libs/component';
 
 const onDOMContentLoadedTasks = [() => {
 	Tabs.init('.js-tabs');
