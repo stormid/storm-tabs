@@ -1,6 +1,6 @@
 /**
  * @name storm-tabs: For multi-panelled content areas
- * @version 1.2.0: Mon, 09 Oct 2017 11:02:17 GMT
+ * @version 1.2.2: Thu, 11 Jan 2018 09:26:34 GMT
  * @author stormid
  * @license MIT
  */
@@ -26,6 +26,7 @@ Object.defineProperty(exports, "__esModule", {
 var defaults = {
     titleClass: '.js-tabs__link',
     currentClass: 'active',
+    updateURL: true,
     active: 0
 };
 
@@ -144,8 +145,7 @@ var componentPrototype = {
     toggle: function toggle(i) {
         if (this.current === i) return;
 
-        window.history && window.history.pushState({ URL: this.tabs[i].getAttribute('href') }, '', this.tabs[i].getAttribute('href'));
-
+        this.settings.updateURL && window.history && window.history.replaceState({ URL: this.tabs[i].getAttribute('href') }, '', this.tabs[i].getAttribute('href'));
         if (this.current === null) this.open(i);else this.close(this.current).open(i);
 
         return this;

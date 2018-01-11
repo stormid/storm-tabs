@@ -99,8 +99,7 @@ export default {
     toggle(i) {
         if(this.current === i) return;
         
-        window.history && window.history.pushState({ URL: this.tabs[i].getAttribute('href') }, '', this.tabs[i].getAttribute('href'));
-
+        (this.settings.updateURL && window.history) && window.history.replaceState({ URL: this.tabs[i].getAttribute('href') }, '', this.tabs[i].getAttribute('href'));
         if(this.current === null) this.open(i);
         else this.close(this.current).open(i);
 
