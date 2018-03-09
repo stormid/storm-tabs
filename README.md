@@ -2,12 +2,10 @@
 
 Accessible (ARIA and keyboard support) tabs for multi-panelled content areas.
 
-[![Build Status](https://travis-ci.org/mjbp/storm-tabs.svg?branch=master)](https://travis-ci.org/mjbp/storm-tabs)
-[![codecov.io](http://codecov.io/github/mjbp/storm-tabs/coverage.svg?branch=master)](http://codecov.io/github/mjbp/storm-tabs?branch=master)
 [![npm version](https://badge.fury.io/js/storm-tabs.svg)](https://badge.fury.io/js/storm-tabs)
 
 ## Example
-[https://mjbp.github.io/storm-tabs](https://mjbp.github.io/storm-tabs)
+[https://stormid.github.io/storm-tabs](https://stormid.github.io/storm-tabs)
 
 ## Usage
 HTML
@@ -72,7 +70,7 @@ npm run test
 ## Browser support
 This is module has both es6 and es5 distributions. The es6 version should be used in a workflow that transpiles.
 
-The es5 version depends unpon Object.assign, element.classList, and Promises so all evergreen browsers are supported out of the box, ie9+ is supported with polyfills. ie8+ will work with even more polyfils for Array functions and eventListeners.
+The es5 version depends unpon Object.assign so all evergreen browsers are supported out of the box, ie9+ is supported with polyfills. ie8+ will work with even more polyfils for Array functions and eventListeners.
 
 ## Dependencies
 None
